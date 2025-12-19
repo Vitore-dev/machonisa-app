@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}All Loans{% endblock %}
+
+{% block content %}
+<h1>📋 Loans List</h1>
+
+{% if loans %}
+    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Borrower Name</th>
+                <th>Principal Amount</th>
+                <th>Interest Rate</th>
+                <th>Total Due</th>
+                <th>Amount Paid</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th>Overdue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+            <tr>
+                <td>{{ loan.loan_id }}</td>
+                <td>{{ loan.borrower_name }}</td>
+                <td>KSh {{ "%.2f"|format(loan.principal_amount) }}</td>
+                <td>{{ loan.interest_rate }}%</td>
+                <td>KSh {{ "%.2f"|format(loan.total_due) }}</td>
+                <td>KSh {{ "%.2f"|format(loan.amount_paid) }}</td>
+                <td>KSh {{ "%.2f"|format(loan.balance) }}</td>
+                <td>{{ loan.status }}</td>
+                <td>{{ loan.due_date.strftime('%Y-%m-%d') if loan.due_date else 'N/A' }}</td>
+                <td>
+                    {% if loan.is_overdue %}
+                        <span style="color: red; font-weight: bold;">⚠️ Yes</span>
+                    {% else %}
+                        <span style="color: green;">No</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Total Loans: {{ loans|length }}</p>
+{% else %}
+    <p>No loans found in the database.</p>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <p>
+        <a href="/api/loans/" target="_blank">View as JSON (API)</a> | 
+        <a href="/test">Test Page</a>
+    </p>
+</div>
+{% endblock %}

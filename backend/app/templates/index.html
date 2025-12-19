@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}All Borrowers{% endblock %}
+
+{% block content %}
+<h1>All Loans Borrowers</h1>
+    <ul>
+        {% for borrower in borrowers %}
+    <li>
+        Boorower ID: {{ borrower.borrower_id }}, 
+        full name: {{ borrower.full_name }}, 
+        Phone number: {{ borrower.phone_number }}
+    </li>
+    {% endfor %}
+    </ul>
+
+    <h3>New Borrower</h3>
+    <form action="{{ url_for('create_borrower') }}" method="POST">
+        <input type="text" name="full_name" placeholder="Name" required="required">
+        <input type="text" name="phone_number" placeholder="Phone number">
+        <input type="text" name="id_number" placeholder="Id number">
+        <input type="text" name="address" placeholder="Address">
+        <input type="submit" value="Create">
+        
+
+    </form>
+
+     
+
+{% endblock %}

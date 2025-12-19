@@ -1,15 +1,26 @@
 from flask import Flask
-from models import db
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import os
 
-app = Flask(__name__)
+db = SQLAlchemy()
+migrate = Migrate()
 
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///machonisa.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+def create_app():
+    app = Flask(__name__,template_folder='templates')
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'testdb.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)
+    db.init_app(app)
+    migrate.init_app(app , db)
 
-with app.app_context():
-    db.create_all()
+    ##from .routes import register_routes
+    ##register_routes(app,db)
+    ##from . import routes
+    ##routes.init_app(app)
+    from .routes import init_app
+    init_app(app)
 
-if __name__== '__main__' :
-    app.run(debug=True)
+
+    return app
